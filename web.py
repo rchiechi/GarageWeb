@@ -58,8 +58,8 @@ def index():
 def Garage():
     if 'garagecode' in request.form:
         name = request.form['garagecode']
-#    elif 'garagecode' in request.args:
-#        name = request.args['garagecode']
+    elif 'garagecode' in request.args:
+        name = request.args['garagecode']
     else:
         name = ""
 
