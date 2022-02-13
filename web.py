@@ -69,7 +69,7 @@ def Garage():
 def status():
     #  Return JSON path like Shelly1
     #  https://github.com/bydga/homebridge-garage-door-shelly1#readme
-    return app.jsonify({'inputs': [{'input':getGarageDoorState()}]})
+    return jsonify({'inputs': [{'input':getGarageDoorState()}]})
 
 @app.route('/stylesheet.css')
 def stylesheet():
