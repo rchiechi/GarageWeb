@@ -1,6 +1,5 @@
 import time
 import logging
-from matplotlib.pyplot import get
 from flask import Flask, request
 
 
