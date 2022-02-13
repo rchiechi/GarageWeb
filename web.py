@@ -59,11 +59,18 @@ def Garage():
 
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
-        if lastDoorState == DOORCLOSED:
+        if lastDoorState() == DOORCLOSED:
             lastDoorState(DOOROPEN)
-        elif lastDoorState == DOOROPEN:
+        elif lastDoorState() == DOOROPEN:
             lastDoorState(DOORCLOSED)
-        return redirect("/", code=302)
+        else:
+            logger.debug("Found unknown door state sleeping for 5 and setting to current state.")
+            time.sleep(5)
+            lastDoorState(getGarageDoorState())
+        if request.method == 'POST': #  TODO: figure out if request came from static html
+            return redirect("/", code=302)
+        else:
+            return status()
         #return handle_garage_status()
 
     if name != PASSWORD:
