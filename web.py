@@ -21,8 +21,13 @@ streamHandler.setFormatter(logFormatter)
 logger.addHandler(streamHandler)
 logger.setLevel(logging.DEBUG)
 
+
+global PASSWORD
+global LASTDOORSTATE
+
 PASSWORD = getPassword()
 LASTDOORSTATE = getGarageDoorState()
+
 app = Flask(__name__)
 
 def handle_garage_status():  # User feedback about garage status
