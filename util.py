@@ -52,9 +52,14 @@ def toggleGarageDoorState():
     GPIO.output(7, GPIO.LOW)
     time.sleep(1)
     GPIO.output(7, GPIO.HIGH)
-    time.sleep(2)
+    __start = time.time()
+    while getGarageDoorState() == DOORUNKNOWN:
+        time.sleep(1)
+        if time.time() - __start > 30:
+            break
 
 def lastDoorState(set_state = None):
+    print("set_state: %s" % set_state)
     if not os.path.exists(STATEFILE):
         return lastDoorState(getGarageDoorState())
     if set_state is not None:
