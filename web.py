@@ -32,8 +32,6 @@ def handle_garage_status():  # User feedback about garage status
             logger.debug("Garage is Open")
             return app.send_static_file('Open.html')
 
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return handle_garage_status()
