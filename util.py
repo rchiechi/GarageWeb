@@ -23,6 +23,12 @@ DOOROPENING = 2
 DOORCLOSING = 3
 DOORUNKNOWN = -1
 
+door_dict = {DOOROPEN: "Open",
+             DOORCLOSED: "Close",
+             DOOROPENING: "Opening",
+             DOORCLOSING: "Closing",
+             DOORUNKNOWN: "Unknown"}
+
 def getPassword(fn = None):
     if fn is None: #  By default read from file "pw" in same dir as python scripts
         fn = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pw")  
