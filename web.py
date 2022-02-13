@@ -4,6 +4,7 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import jsonify
+from werkzeug.exceptions import BadRequestKeyError
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
@@ -55,7 +56,10 @@ def index():
 
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
-    name = request.form['garagecode']
+    try:
+        name = request.form['garagecode']
+    except BadRequestKeyError:
+        name = None
     logger.debug(name)
     if name is None:
         args = request.args
