@@ -76,6 +76,7 @@ def Garage():
     if name != PASSWORD:
         if name == "":
             name = "NULL"
+        logger.debug("Last state: %s", lastDoorState())
         logger.debug("Garage Code Entered: %s", name)
         return redirect("/", code=302)
         #return handle_garage_status()
