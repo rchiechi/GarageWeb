@@ -43,4 +43,4 @@ def toggleGarageDoorState():
     GPIO.output(7, GPIO.LOW)
     time.sleep(1)
     GPIO.output(7, GPIO.HIGH)
-    time.sleep(2)
+    time.sleep(5)
