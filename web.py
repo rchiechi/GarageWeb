@@ -95,6 +95,7 @@ def logfile():
 
 @app.route('/images/<picture>')
 def images(picture):
+    logger.debug("Status polled.")
     return app.send_static_file('images/' + picture)
 
 
