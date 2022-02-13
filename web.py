@@ -21,14 +21,14 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if GPIO.input(16) == GPIO.HIGH and GPIO.input(18) == GPIO.HIGH:
+    if GPIO.input(16) == GPIO.LOW and GPIO.input(18) == GPIO.LOW:
         print("Garage is Opening/Closing")
         return app.send_static_file('Question.html')
     else:
-        if GPIO.input(16) == GPIO.LOW:
+        if GPIO.input(16) == GPIO.HIGH:
             print("Garage is Closed")
             return app.send_static_file('Closed.html')
-        if GPIO.input(18) == GPIO.LOW:
+        if GPIO.input(18) == GPIO.HIGH:
             print("Garage is Open")
             return app.send_static_file('Open.html')
 
@@ -40,10 +40,10 @@ def Garage():
             print("Garage is Opening/Closing")
             return app.send_static_file('Question.html')
         else:
-            if GPIO.input(16) == GPIO.LOW:
+            if GPIO.input(16) == GPIO.HIGH:
                 print("Garage is Closed")
                 return app.send_static_file('Closed.html')
-            if GPIO.input(18) == GPIO.LOW:
+            if GPIO.input(18) == GPIO.HIGH:
                 print("Garage is Open")
                 return app.send_static_file('Open.html')
 
