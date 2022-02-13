@@ -56,9 +56,12 @@ def index():
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
     name = request.form['garagecode']
+    logger.debug(name)
     if name is None:
         args = request.args
         name = args['garagecode']
+    logger.debug(args)
+
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
         if last_state == DOORCLOSED:
