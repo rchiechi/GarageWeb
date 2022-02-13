@@ -22,7 +22,7 @@ logger.addHandler(streamHandler)
 fileHandler = logging.FileHandler(LOGFILE)
 fileHandler.setFormatter(logFormatter)
 logger.addHandler(fileHandler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 logger.info("Hello! Program Starting.")
 print(" Control + C to exit Program")
@@ -39,7 +39,7 @@ try:
     while True:
         if os.path.getsize(LOGFILE) > 1024**2:
             os.unlink(LOGFILE)  # Prune log file when it hits 1 MB
-        logger.info("Last door state was: %s", door_dict[lastDoorState()])
+        logger.debug("Last door state was: %s", door_dict[lastDoorState()])
         time.sleep(5)
         if DoorOpenTimer == 1:  # Door Open Timer has Started
             currentTimeDate = datetime.strptime(
@@ -51,8 +51,6 @@ try:
 
         if getGarageDoorState() == DOORUNKNOWN:  # Door Status is Unknown
             logger.info("Door Opening/Closing")
-            while GPIO.input(16) == GPIO.HIGH and GPIO.input(18) == GPIO.HIGH:
-                time.sleep(.5)
         else:
             if getGarageDoorState() == DOORCLOSED:  # Door is Closed
                 logger.info("Door Closed")
