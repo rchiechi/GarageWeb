@@ -1,25 +1,10 @@
 import time
 import logging
 from flask import Flask, request
-
-
-# import RPi.GPIO as GPIO
-# GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
-# GPIO.setwarnings(False)
-# GPIO.setup(16, GPIO.IN, GPIO.PUD_UP)  # set up pin 16 as input and pull up to 3V via software pull-up resistor
-# GPIO.setup(18, GPIO.IN, GPIO.PUD_UP)  # set up pin 18 as input and pull up to 3V via software pull-up resistor
-# GPIO.setup(7, GPIO.OUT)
-# GPIO.output(7, GPIO.HIGH)
-# GPIO.setup(11, GPIO.OUT)
-# GPIO.output(11, GPIO.HIGH)
-# GPIO.setup(13, GPIO.OUT)
-# GPIO.output(13, GPIO.HIGH)
-# GPIO.setup(15, GPIO.OUT)
-# GPIO.output(15, GPIO.HIGH)
-
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
+from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
 
@@ -28,9 +13,6 @@ logger = logging.getLogger('GarageWeb')
 streamHandler = logging.StreamHandler()
 streamHandler.setFormatter(logFormatter)
 logger.addHandler(streamHandler)
-# fileHandler = logging.FileHandler(LOGFILE)
-# fileHandler.setFormatter(logFormatter)
-# logger.addHandler(fileHandler)
 logger.setLevel(logging.DEBUG)
 
 PASSWORD = getPassword()
@@ -59,10 +41,7 @@ def index():
 def Garage():
     name = request.form['garagecode']
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
-        GPIO.output(7, GPIO.LOW)
-        time.sleep(1)
-        GPIO.output(7, GPIO.HIGH)
-        time.sleep(2)
+        toggleGarageDoorState()
         return handle_garage_status()
 
     if name != PASSWORD:

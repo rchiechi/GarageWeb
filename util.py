@@ -1,4 +1,5 @@
 import os
+import time
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
@@ -37,3 +38,9 @@ def getGarageDoorState():
             return DOORCLOSED
         if GPIO.input(18) == GPIO.HIGH:
             return DOOROPEN
+
+def toggleGarageDoorState():
+    GPIO.output(7, GPIO.LOW)
+    time.sleep(1)
+    GPIO.output(7, GPIO.HIGH)
+    time.sleep(2)
