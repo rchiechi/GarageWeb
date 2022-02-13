@@ -30,7 +30,7 @@ DoorOpenTimerMessageSent = 1  # Turn off messages until timer is started
 
 try:
     while True:
-        time.sleep(1)
+        time.sleep(10)
         if DoorOpenTimer == 1:  # Door Open Timer has Started
             currentTimeDate = datetime.strptime(
                 datetime.strftime(datetime.now(),
