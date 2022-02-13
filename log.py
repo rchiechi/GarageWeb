@@ -8,6 +8,7 @@ from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
 from util import getGarageDoorState
+from util import lastDoorState
 from util import LOGFILE
 
 logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
@@ -33,6 +34,7 @@ try:
     while True:
         if os.path.getsize(LOGFILE) > 1024**2:
             os.unlink(LOGFILE)  # Prune log file when it hits 1 MB
+        logger.info("Last door state was: %s", lastDoorState())
         time.sleep(5)
         if DoorOpenTimer == 1:  # Door Open Timer has Started
             currentTimeDate = datetime.strptime(
