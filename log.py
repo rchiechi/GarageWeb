@@ -3,7 +3,10 @@ import RPi.GPIO as GPIO
 import time
 from datetime import datetime
 import logging
-from util import *
+from util import DOOROPEN
+from util import DOORCLOSED
+from util import DOORUNKNOWN
+from util import getGarageDoorState
 
 LOGFILE = "/tmp/GarageWeb.log"
 

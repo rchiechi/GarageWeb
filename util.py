@@ -1,7 +1,6 @@
-__all__ = [DOOROPEN, DOORCLOSED, DOORUNKNOWN, getGarageDoorState]
 import os
-
 import RPi.GPIO as GPIO
+
 GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
 GPIO.setwarnings(False)
 GPIO.setup(16, GPIO.IN, GPIO.PUD_UP)  # set up pin 16 as input and pull up to 3V via software pull-up resistor

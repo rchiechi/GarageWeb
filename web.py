@@ -17,7 +17,10 @@ from flask import Flask, request
 # GPIO.setup(15, GPIO.OUT)
 # GPIO.output(15, GPIO.HIGH)
 
-from util import *
+from util import DOOROPEN
+from util import DOORCLOSED
+from util import DOORUNKNOWN
+from util import getGarageDoorState
 from util import getPassword
 
 logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
