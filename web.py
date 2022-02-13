@@ -53,13 +53,13 @@ def Garage():
         time.sleep(1)
         GPIO.output(7, GPIO.HIGH)
         time.sleep(2)
-        __handle_garage_status()
+        return __handle_garage_status()
 
     if name != '12345678':  # 12345678 is the Password that Opens Garage Door (Code if Password is Incorrect)
         if name == "":
             name = "NULL"
         print("Garage Code Entered: " + name)
-        __handle_garage_status()
+        return __handle_garage_status()
 
 @app.route('/stylesheet.css')
 def stylesheet():
