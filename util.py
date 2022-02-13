@@ -16,6 +16,7 @@ GPIO.setup(15, GPIO.OUT)
 GPIO.output(15, GPIO.HIGH)
 
 LOGFILE = "/tmp/GarageWeb.log"
+STATEFILE = "/tmp/garagedoor.state"
 DOOROPEN = 0
 DOORCLOSED = 1
 DOOROPENING = 2
@@ -46,3 +47,12 @@ def toggleGarageDoorState():
     time.sleep(1)
     GPIO.output(7, GPIO.HIGH)
     time.sleep(2)
+
+def lastDoorState(set_state = None):
+    if not os.path.exists(STATEFILE):
+        return lastDoorState(DOORUNKNOWN)
+    if set_state is not None:
+        with open(STATEFILE, 'wt') as fh:
+            fh.write(str(set_state).strip())
+    with open(STATEFILE, 'rt') as fh:
+        return fh.read(128).strip()

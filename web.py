@@ -13,6 +13,7 @@ from util import DOORCLOSING
 from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
+from util import lastDoorState
 from util import LOGFILE
 
 logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
@@ -22,22 +23,15 @@ streamHandler.setFormatter(logFormatter)
 logger.addHandler(streamHandler)
 logger.setLevel(logging.DEBUG)
 
-global LASTDOORSTATE
 PASSWORD = getPassword()
-LASTDOORSTATE = getGarageDoorState()
 
 app = Flask(__name__)
 
-def last_state(doorstate=None):
-    if doorstate is not None:
-        LASTDOORSTATE = doorstate
-    return LASTDOORSTATE
-
 def handle_garage_status():  # User feedback about garage status
     if getGarageDoorState() == DOORUNKNOWN:
-        if LASTDOORSTATE == DOORCLOSED:
+        if lastDoorState() == DOORCLOSED:
             logger.debug("Garage is Opening")
-        elif LASTDOORSTATE == DOOROPEN:
+        elif lastDoorState() == DOOROPEN:
             logger.debug("Garage door in Closing")
         else:
             logger.debug("Garage door is Opening/Closing")
@@ -65,10 +59,10 @@ def Garage():
 
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
-        if last_state == DOORCLOSED:
-            last_state(DOOROPEN)
-        elif last_state == DOOROPEN:
-            last_state(DOORCLOSED)
+        if lastDoorState == DOORCLOSED:
+            lastDoorState(DOOROPEN)
+        elif lastDoorState == DOOROPEN:
+            lastDoorState(DOORCLOSED)
         return redirect("/", code=302)
         #return handle_garage_status()
 
