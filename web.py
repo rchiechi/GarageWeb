@@ -41,13 +41,15 @@ def Garage():
     name = request.form['garagecode']
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
-        return handle_garage_status()
+        return redirect("/", code=302)
+        #return handle_garage_status()
 
     if name != PASSWORD:
         if name == "":
             name = "NULL"
         logger.debug("Garage Code Entered: " + name)
-        return handle_garage_status()
+        return redirect("/", code=302)
+        #return handle_garage_status()
 
 @app.route('/stylesheet.css')
 def stylesheet():

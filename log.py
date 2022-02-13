@@ -19,25 +19,8 @@ fileHandler.setFormatter(logFormatter)
 logger.addHandler(fileHandler)
 logger.setLevel(logging.DEBUG)
 
-
-
-#def emit_log(msg, preamble=''):
-#    logfile = open(LOGFILE,"a")
-#    __datetime = datetime.now().strftime("%s%Y/%m/%d -- %H:%M")
-#    logfile.write("%s%s -- %s\n" % (preamble, __datetime, msg))
-#    logfile.close()
-#    print("%s%s -- %s\n" % (preamble, __datetime, msg))
-
-
 logger.info("Hello! Program Starting.")
 print(" Control + C to exit Program")
-
-# GPIO.setmode(GPIO.BOARD)
-# GPIO.setwarnings(False)
-
-# GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# time.sleep(1)
 
 TimeDoorOpened = datetime.strptime(
     datetime.strftime(datetime.now(),
@@ -73,7 +56,6 @@ try:
                                       '%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
                 DoorOpenTimer = 1
                 DoorOpenTimerMessageSent = 0
-
 
 except KeyboardInterrupt:
     logger.info('Goodbye!', '    Log Program Shutdown --  ')
