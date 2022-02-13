@@ -21,14 +21,16 @@ streamHandler.setFormatter(logFormatter)
 logger.addHandler(streamHandler)
 logger.setLevel(logging.DEBUG)
 
-
-global PASSWORD
 global LASTDOORSTATE
-
 PASSWORD = getPassword()
 LASTDOORSTATE = getGarageDoorState()
 
 app = Flask(__name__)
+
+def last_state(doorstate=None):
+    if doorstate is not None:
+        LASTDOORSTATE = doorstate
+    return LASTDOORSTATE
 
 def handle_garage_status():  # User feedback about garage status
     if getGarageDoorState() == DOORUNKNOWN:
@@ -56,10 +58,10 @@ def Garage():
     name = request.form['garagecode']
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
-        if LASTDOORSTATE == DOORCLOSED:
-            LASTDOORSTATE = DOOROPEN
-        elif LASTDOORSTATE == DOOROPEN:
-            LASTDOORSTATE = DOORCLOSED
+        if last_state == DOORCLOSED:
+            last_state(DOOROPEN)
+        elif last_state == DOOROPEN:
+            last_state(DOORCLOSED)
         return redirect("/", code=302)
         #return handle_garage_status()
 
