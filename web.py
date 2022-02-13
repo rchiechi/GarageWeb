@@ -7,6 +7,7 @@ from util import DOORUNKNOWN
 from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
+from log import LOGFILE
 
 logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
 logger = logging.getLogger('GarageWeb')
@@ -56,7 +57,7 @@ def stylesheet():
 
 @app.route('/log')
 def logfile():
-    return app.send_static_file('log.txt')
+    return app.send_static_file(LOGFILE)
 
 @app.route('/images/<picture>')
 def images(picture):
