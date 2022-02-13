@@ -25,7 +25,7 @@ DOORCLOSING = 3
 DOORUNKNOWN = -1
 
 door_dict = {DOOROPEN: "Open",
-             DOORCLOSED: "Close",
+             DOORCLOSED: "Closed",
              DOOROPENING: "Opening",
              DOORCLOSING: "Closing",
              DOORUNKNOWN: "Unknown"}
