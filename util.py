@@ -89,4 +89,4 @@ def lastDoorState(set_state = None):
         with open(STATEFILE, 'wt') as fh:
             fh.write(str(set_state).strip())
     with open(STATEFILE, 'rt') as fh:
-        return fh.read(128).strip()
+        return int(fh.read(128).strip())
