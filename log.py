@@ -1,5 +1,6 @@
 # import os
 import RPi.GPIO as GPIO
+import os
 import time
 from datetime import datetime
 import logging
@@ -30,7 +31,9 @@ DoorOpenTimerMessageSent = 1  # Turn off messages until timer is started
 
 try:
     while True:
-        time.sleep(10)
+        if os.path.getsize(LOGFILE) > 1024**2:
+            os.unlink(LOGFILE)  # Prune log file when it hits 1 MB
+        time.sleep(5)
         if DoorOpenTimer == 1:  # Door Open Timer has Started
             currentTimeDate = datetime.strptime(
                 datetime.strftime(datetime.now(),
