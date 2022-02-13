@@ -56,15 +56,12 @@ def index():
 
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
-    try:
+    if 'garagecode' in request.form:
         name = request.form['garagecode']
-    except BadRequestKeyError:
-        name = None
-    logger.debug(name)
-    if name is None:
-        args = request.args
-        name = args['garagecode']
-    logger.debug(args)
+    elif 'garagecode' in request.args:
+        name = request.args['garagecode']
+    else:
+        name = ""
 
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
@@ -78,7 +75,7 @@ def Garage():
     if name != PASSWORD:
         if name == "":
             name = "NULL"
-        logger.debug("Garage Code Entered: " + name)
+        logger.debug("Garage Code Entered: %s", name)
         return redirect("/", code=302)
         #return handle_garage_status()
 
