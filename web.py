@@ -7,7 +7,7 @@ from util import DOORUNKNOWN
 from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
-from log import LOGFILE
+from util import LOGFILE
 
 logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
 logger = logging.getLogger('GarageWeb')
