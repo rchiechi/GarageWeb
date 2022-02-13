@@ -65,7 +65,7 @@ def Garage():
         return redirect("/", code=302)
         #return handle_garage_status()
 
-@app.route('/status')
+@app.route('/status', methods=['GET', 'POST'])
 def status():
     #  Return JSON path like Shelly1
     #  https://github.com/bydga/homebridge-garage-door-shelly1#readme
