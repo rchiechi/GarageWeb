@@ -16,8 +16,10 @@ GPIO.setup(15, GPIO.OUT)
 GPIO.output(15, GPIO.HIGH)
 
 LOGFILE = "/tmp/GarageWeb.log"
-DOOROPEN = 1
-DOORCLOSED = 0
+DOOROPEN = 0
+DOORCLOSED = 1
+DOOROPENING = 2
+DOORCLOSING = 3
 DOORUNKNOWN = -1
 
 def getPassword(fn = None):

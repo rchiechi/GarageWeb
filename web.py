@@ -3,9 +3,12 @@ import logging
 from flask import Flask
 from flask import request
 from flask import redirect
+from flask import jsonify
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
+from util import DOOROPENING
+from util import DOORCLOSING
 from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
@@ -19,12 +22,17 @@ logger.addHandler(streamHandler)
 logger.setLevel(logging.DEBUG)
 
 PASSWORD = getPassword()
-
+LASTDOORSTATE = getGarageDoorState()
 app = Flask(__name__)
 
 def handle_garage_status():  # User feedback about garage status
     if getGarageDoorState() == DOORUNKNOWN:
-        logger.debug("Garage is Opening/Closing")
+        if LASTDOORSTATE == DOORCLOSED:
+            logger.debug("Garage is Opening")
+        elif LASTDOORSTATE == DOOROPEN:
+            logger.debug("Garage door in Closing")
+        else:
+            logger.debug("Garage door is Opening/Closing")
         return app.send_static_file('Question.html')
     else:
         if getGarageDoorState() == DOORCLOSED:
@@ -43,6 +51,10 @@ def Garage():
     name = request.form['garagecode']
     if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
+        if LASTDOORSTATE == DOORCLOSED:
+            LASTDOORSTATE = DOOROPEN
+        elif LASTDOORSTATE == DOOROPEN:
+            LASTDOORSTATE = DOORCLOSED
         return redirect("/", code=302)
         #return handle_garage_status()
 
@@ -52,6 +64,10 @@ def Garage():
         logger.debug("Garage Code Entered: " + name)
         return redirect("/", code=302)
         #return handle_garage_status()
+
+@app.route('/status')
+def status():
+    return app.send_static
 
 @app.route('/stylesheet.css')
 def stylesheet():
