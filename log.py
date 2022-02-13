@@ -14,7 +14,7 @@ from util import lastDoorState
 from util import door_dict
 from util import LOGFILE
 
-logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
+logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
 logger = logging.getLogger('GarageWebLogger')
 streamHandler = logging.StreamHandler()
 streamHandler.setFormatter(logFormatter)

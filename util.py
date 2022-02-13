@@ -30,7 +30,7 @@ door_dict = {DOOROPEN: "Open",
              DOORCLOSING: "Closing",
              DOORUNKNOWN: "Unknown"}
 
-logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
+logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
 logger = logging.getLogger('GarageWebUtil')
 streamHandler = logging.StreamHandler()
 streamHandler.setFormatter(logFormatter)
