@@ -58,5 +58,5 @@ try:
                 DoorOpenTimerMessageSent = 0
 
 except KeyboardInterrupt:
-    logger.info('Goodbye!', '    Log Program Shutdown --  ')
+    logger.info('Goodbye! -- Log Program Shutdown')
     GPIO.cleanup()

@@ -1,6 +1,8 @@
 import time
 import logging
-from flask import Flask, request
+from flask import Flask
+from Flask import request
+from Flask import redirect
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
