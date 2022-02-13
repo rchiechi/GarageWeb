@@ -6,8 +6,8 @@ from flask import Flask, request
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
 GPIO.setwarnings(False)
-GPIO.setup(16, GPIO.IN, GPIO.PUD_UP)  # set up pin ?? (one of the above listed pins) as an input with a pull-up resistor
-GPIO.setup(18, GPIO.IN, GPIO.PUD_UP)  # set up pin ?? (one of the above listed pins) as an input with a pull-up resistor
+GPIO.setup(16, GPIO.IN, GPIO.PUD_UP)  # set up pin 16 as input and pull up to 3V via software pull-up resistor
+GPIO.setup(18, GPIO.IN, GPIO.PUD_UP)  # set up pin 18 as input and pull up to 3V via software pull-up resistor
 GPIO.setup(7, GPIO.OUT)
 GPIO.output(7, GPIO.HIGH)
 GPIO.setup(11, GPIO.OUT)
@@ -33,7 +33,7 @@ def index():
             return app.send_static_file('Open.html')
 
 
-@app.route('/Garage', methods=['GET', 'POST'])
+@app.route('/garage', methods=['GET', 'POST'])
 def Garage():
     def __handle_garage_status():  # User feedback about garage status
         if GPIO.input(16) == GPIO.HIGH and GPIO.input(18) == GPIO.HIGH:
@@ -65,7 +65,7 @@ def Garage():
 def stylesheet():
     return app.send_static_file('stylesheet.css')
 
-@app.route('/Log')
+@app.route('/log')
 def logfile():
     return app.send_static_file('log.txt')
 
