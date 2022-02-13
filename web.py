@@ -1,7 +1,8 @@
 import time
-#  from datetime import datetime
+
+from matplotlib.pyplot import get
 from flask import Flask, request
-#  render_template,
+
 
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
@@ -17,7 +18,12 @@ GPIO.output(13, GPIO.HIGH)
 GPIO.setup(15, GPIO.OUT)
 GPIO.output(15, GPIO.HIGH)
 
+from util import getpassword
+PASSWORD = getpasswd()
+
 app = Flask(__name__)
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -48,14 +54,14 @@ def Garage():
                 return app.send_static_file('Open.html')
 
     name = request.form['garagecode']
-    if name == '12345678':  # 12345678 is the Password that Opens Garage Door (Code if Password is Correct)
+    if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         GPIO.output(7, GPIO.LOW)
         time.sleep(1)
         GPIO.output(7, GPIO.HIGH)
         time.sleep(2)
         return __handle_garage_status()
 
-    if name != '12345678':  # 12345678 is the Password that Opens Garage Door (Code if Password is Incorrect)
+    if name != PASSWORD:
         if name == "":
             name = "NULL"
         print("Garage Code Entered: " + name)
