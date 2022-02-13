@@ -59,10 +59,9 @@ def toggleGarageDoorState():
             break
 
 def lastDoorState(set_state = None):
-    print("set_state: %s" % set_state)
     if not os.path.exists(STATEFILE):
-        return lastDoorState(getGarageDoorState())
-    if set_state is not None:
+        set_state = getGarageDoorState()
+    if set_state is not None or :
         with open(STATEFILE, 'wt') as fh:
             fh.write(str(set_state).strip())
     with open(STATEFILE, 'rt') as fh:
