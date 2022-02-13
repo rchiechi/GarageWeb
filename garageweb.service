@@ -1,0 +1,12 @@
+[Unit]
+Description=GarageWeb
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+ExecStart=python3 /home/pi/GarageWeb/web.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

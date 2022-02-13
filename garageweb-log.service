@@ -1,0 +1,11 @@
+Description=GarageWeb Log
+After=garageweb.service
+
+[Service]
+Type=simple
+User=pi
+ExecStart=python3 /home/pi/GarageWeb/log.py
+Restart=on-abort
+
+[Install]
+WantedBy=garageweb.service
