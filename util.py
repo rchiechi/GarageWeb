@@ -51,18 +51,23 @@ def getPassword(fn = None):
 
 
 def getGarageDoorState():
-    logger.debug("getGarageDoorState: Last door state was %s", lastDoorState())
+    logger.debug("getGarageDoorState: Last door state was %s", door_dict[lastDoorState()])
     if GPIO.input(16) == GPIO.LOW and GPIO.input(18) == GPIO.LOW:
         if lastDoorState() == DOORCLOSED:
+            logger.debug("getGarageDoorState: %s", door_dict[DOORCLOSED])
             return DOOROPENING
         elif lastDoorState() == DOOROPEN:
+            logger.debug("getGarageDoorState: %s", door_dict[DOORCLOSING])
             return DOORCLOSING
         else:
+            logger.debug("getGarageDoorState: %s", door_dict[DOORUNKNOWN])
             return DOORUNKNOWN
     else:
         if GPIO.input(16) == GPIO.HIGH:
+            logger.debug("getGarageDoorState: %s", door_dict[DOORCLOSED])
             return DOORCLOSED
         if GPIO.input(18) == GPIO.HIGH:
+            logger.debug("getGarageDoorState: %s", door_dict[DOOROPEN])
             return DOOROPEN
 
 def toggleGarageDoorState():
@@ -80,7 +85,7 @@ def lastDoorState(set_state = None):
     if not os.path.exists(STATEFILE):
         set_state = getGarageDoorState()
     if set_state is not None:
-        logger.debug("lastDoorState: Setting door state %s", set_state)
+        logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
         with open(STATEFILE, 'wt') as fh:
             fh.write(str(set_state).strip())
     with open(STATEFILE, 'rt') as fh:
