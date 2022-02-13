@@ -33,7 +33,7 @@ logger.addHandler(streamHandler)
 # logger.addHandler(fileHandler)
 logger.setLevel(logging.DEBUG)
 
-PASSWORD = getPassword()()
+PASSWORD = getPassword()
 
 app = Flask(__name__)
 
