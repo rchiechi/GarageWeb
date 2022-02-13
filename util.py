@@ -1,6 +1,7 @@
 import os
 import time
 import RPi.GPIO as GPIO
+import logging
 
 GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
 GPIO.setwarnings(False)
@@ -29,6 +30,16 @@ door_dict = {DOOROPEN: "Open",
              DOORCLOSING: "Closing",
              DOORUNKNOWN: "Unknown"}
 
+logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
+logger = logging.getLogger('GarageWebUtil')
+streamHandler = logging.StreamHandler()
+streamHandler.setFormatter(logFormatter)
+logger.addHandler(streamHandler)
+fileHandler = logging.FileHandler(LOGFILE)
+fileHandler.setFormatter(logFormatter)
+logger.addHandler(fileHandler)
+logger.setLevel(logging.DEBUG)
+
 def getPassword(fn = None):
     if fn is None: #  By default read from file "pw" in same dir as python scripts
         fn = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pw")  
@@ -40,8 +51,14 @@ def getPassword(fn = None):
 
 
 def getGarageDoorState():
+    logger.debug("getGarageDoorState: Last door state was %s", lastDoorState())
     if GPIO.input(16) == GPIO.LOW and GPIO.input(18) == GPIO.LOW:
-        return DOORUNKNOWN
+        if lastDoorState() == DOORCLOSED:
+            return DOOROPENING
+        elif lastDoorState() == DOOROPEN:
+            return DOORCLOSING
+        else:
+            return DOORUNKNOWN
     else:
         if GPIO.input(16) == GPIO.HIGH:
             return DOORCLOSED
@@ -55,6 +72,7 @@ def toggleGarageDoorState():
     __start = time.time()
     while getGarageDoorState() == DOORUNKNOWN:
         time.sleep(1)
+        logger.debug("toggleGarageDoorState: Sleeping while door changed state.")
         if time.time() - __start > 30:
             break
 
@@ -62,6 +80,7 @@ def lastDoorState(set_state = None):
     if not os.path.exists(STATEFILE):
         set_state = getGarageDoorState()
     if set_state is not None:
+        logger.debug("lastDoorState: Setting door state %s", set_state)
         with open(STATEFILE, 'wt') as fh:
             fh.write(str(set_state).strip())
     with open(STATEFILE, 'rt') as fh:
