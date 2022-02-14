@@ -16,8 +16,8 @@ GPIO.output(13, GPIO.HIGH)
 GPIO.setup(15, GPIO.OUT)
 GPIO.output(15, GPIO.HIGH)
 
-LOGFILE = "/tmp/GarageWeb.log"
-STATEFILE = "/tmp/garagedoor.state"
+LOGFILE = "/var/log/garageweb/GarageWeb.log"
+STATEFILE = "/var/run/garageweb/garagedoor.state"
 DOOROPEN = 0
 DOORCLOSED = 1
 DOOROPENING = 2
