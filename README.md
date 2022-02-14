@@ -1,7 +1,8 @@
 # A fork of [GarageWeb by shrocky2](https://github.com/shrocky2/GarageWeb)
 ### This fork works with Homekit via a [Homebridge plugin](https://www.npmjs.com/package/homebridge-garage-door-shelly1) for a Shelly1 relay switch.
-### YouTube Video Instructions found here: https://youtu.be/Fcx6wANw9KM
+
 ---
+#### YouTube Video Instructions found here: https://youtu.be/Fcx6wANw9KM
 #### Products they used in the video:
 ---
 - Raspberry Pi Zero W with case on Amazon: https://amzn.to/34ujK5C
@@ -49,7 +50,7 @@ flask run --host=0.0.0.0
 
  7. To Setup this code to run automatically on system boot up:
 ```
-sudo cp systemd/* /etc/system/systemd/
+sudo cp systemd/* /etc/systemd/system/
 sudo cp tmpfiles.d/* /etc/tmpfiles.d/
 sudo systemctl enable garageweb-log
 sudo systemcl enable garageweb
