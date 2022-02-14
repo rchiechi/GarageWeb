@@ -4,12 +4,11 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import jsonify
-from werkzeug.exceptions import BadRequestKeyError
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
-from util import DOOROPENING
-from util import DOORCLOSING
+# from util import DOOROPENING
+# from util import DOORCLOSING
 from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
@@ -67,11 +66,10 @@ def Garage():
             logger.debug("Found unknown door state sleeping for 5 and setting to current state.")
             time.sleep(5)
             lastDoorState(getGarageDoorState())
-        if request.method == 'POST': #  TODO: figure out if request came from static html
+        if request.method == 'POST':  # TODO: figure out if request came from static html
             return redirect("/", code=302)
         else:
             return status()
-        #return handle_garage_status()
 
     if name != PASSWORD:
         if name == "":
@@ -79,10 +77,10 @@ def Garage():
         logger.debug("Last state: %s", lastDoorState())
         logger.debug("Garage Code Entered: %s", name)
         return redirect("/", code=302)
-        #return handle_garage_status()
 
 @app.route('/status', methods=['GET', 'POST'])
 def status():
+    logger.debug("Status polled.")
     #  Return JSON path like Shelly1
     #  https://github.com/bydga/homebridge-garage-door-shelly1#readme
     return jsonify({'inputs': [{'input':getGarageDoorState()}]})
@@ -97,9 +95,8 @@ def logfile():
 
 @app.route('/images/<picture>')
 def images(picture):
-    logger.debug("Status polled.")
     return app.send_static_file('images/' + picture)
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000)
