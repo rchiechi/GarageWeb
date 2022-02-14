@@ -1,5 +1,6 @@
 # A fork of [GarageWeb by shrocky2](https://github.com/shrocky2/GarageWeb)
 ### This fork works with Homekit via a [Homebridge plugin](https://www.npmjs.com/package/homebridge-garage-door-shelly1) for a Shelly1 relay switch.
+**NOTE: I had to set the timeout to 30000 manually in config.json**
 
 ---
 #### YouTube Video Instructions found here: https://youtu.be/Fcx6wANw9KM
