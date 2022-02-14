@@ -81,6 +81,7 @@ def Garage():
 @app.route('/status', methods=['GET', 'POST'])
 def status():
     logger.debug("Status polled.")
+    lastDoorState(getGarageDoorState())
     #  Return JSON path like Shelly1
     #  https://github.com/bydga/homebridge-garage-door-shelly1#readme
     return jsonify({'inputs': [{'input':getGarageDoorState()}]})
