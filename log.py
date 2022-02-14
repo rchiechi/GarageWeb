@@ -7,8 +7,8 @@ import logging
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
-from util import DOOROPENING
-from util import DOORCLOSING
+# from util import DOOROPENING
+# from util import DOORCLOSING
 from util import getGarageDoorState
 from util import lastDoorState
 from util import door_dict
@@ -32,8 +32,6 @@ TimeDoorOpened = datetime.strptime(
                       '%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')  # Default Time
 DoorOpenTimer = 0  # Default start status turns timer off
 DoorOpenTimerMessageSent = 1  # Turn off messages until timer is started
-
-
 
 try:
     while True:
