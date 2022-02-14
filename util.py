@@ -85,9 +85,10 @@ def lastDoorState(set_state=None):
     if not os.path.exists(STATEFILE):
         set_state = getGarageDoorState()
     if set_state is not None:
+        set_state = int(set_state)
         logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
         with open(STATEFILE, 'wt') as fh:
             fh.write(str(set_state).strip())
-        return int(set_state)
+        return set_state
     with open(STATEFILE, 'rt') as fh:
         return int(fh.read(128).strip())
