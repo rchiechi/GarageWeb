@@ -55,7 +55,7 @@ def getGarageDoorState():
     logger.debug("GPIO 16: %s GPIO: 18", GPIO.input(16), GPIO.input(18))
     if GPIO.input(16) == GPIO.LOW and GPIO.input(18) == GPIO.LOW:
         if lastDoorState() == DOORCLOSED:
-            logger.debug("getGarageDoorState: %s", door_dict[DOORCLOSED])
+            logger.debug("getGarageDoorState: %s", door_dict[DOOROPENING])
             return DOOROPENING
         elif lastDoorState() == DOOROPEN:
             logger.debug("getGarageDoorState: %s", door_dict[DOORCLOSING])
