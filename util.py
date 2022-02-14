@@ -83,7 +83,7 @@ def toggleGarageDoorState():
 
 def lastDoorState(set_state=None):
     if not os.path.exists(STATEFILE):
-        set_state = getGarageDoorState()
+        set_state = -1
     if set_state is not None:
         set_state = int(set_state)
         logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
