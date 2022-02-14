@@ -88,5 +88,6 @@ def lastDoorState(set_state=None):
         logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
         with open(STATEFILE, 'wt') as fh:
             fh.write(str(set_state).strip())
+        return int(set_state)
     with open(STATEFILE, 'rt') as fh:
         return int(fh.read(128).strip())
