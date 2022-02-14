@@ -5,7 +5,9 @@ After=network-online.target
 [Service]
 Type=simple
 User=pi
-ExecStart=python3 /home/pi/GarageWeb/web.py
+Environment=FLASK_APP=web
+WorkingDirectory /home/pi/GarageWeb
+ExecStart=/usr/bin/flask run --host=0.0.0.0
 Restart=on-abort
 
 [Install]
