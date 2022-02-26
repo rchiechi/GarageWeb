@@ -52,7 +52,7 @@ def handle_garage_status():  # User feedback about garage status
         return app.send_static_file('Question.html')
     else:
         logger.error("Door is in impossible state!")
-        return app.send_static_file('Question.html')
+    return app.send_static_file('Question.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
