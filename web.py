@@ -7,12 +7,14 @@ from flask import jsonify
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
+from util import door_dict
 # from util import DOOROPENING
 # from util import DOORCLOSING
 from util import toggleGarageDoorState
 from util import getGarageDoorState
 from util import getPassword
-from util import lastDoorState
+from util import getLastDoorState
+from util import recordDoorState
 from util import LOGFILE
 
 logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
@@ -26,22 +28,31 @@ PASSWORD = getPassword()
 
 app = Flask(__name__)
 
+def update_saved_door_state():
+    __door_state = getGarageDoorState()
+    if __door_state in (DOOROPEN, DOORCLOSED):
+        recordDoorState(__door_state)
+    return __door_state
+
 def handle_garage_status():  # User feedback about garage status
-    if getGarageDoorState() == DOORUNKNOWN:
-        if lastDoorState() == DOORCLOSED:
+    __door_state = update_saved_door_state()
+    if __door_state == DOORCLOSED:
+        logger.debug("Garage is Closed")
+        return app.send_static_file('Closed.html')
+    if __door_state == DOOROPEN:
+        logger.debug("Garage is Open")
+        return app.send_static_file('Open.html')
+    elif __door_state == DOORUNKNOWN:
+        if getLastDoorState() == DOORCLOSED:
             logger.debug("Garage is Opening")
-        elif lastDoorState() == DOOROPEN:
+        elif getLastDoorState() == DOOROPEN:
             logger.debug("Garage door in Closing")
         else:
             logger.debug("Garage door is Opening/Closing")
         return app.send_static_file('Question.html')
     else:
-        if getGarageDoorState() == DOORCLOSED:
-            logger.debug("Garage is Closed")
-            return app.send_static_file('Closed.html')
-        if getGarageDoorState() == DOOROPEN:
-            logger.debug("Garage is Open")
-            return app.send_static_file('Open.html')
+        logger.error("Door is in impossible state!")
+        return app.send_static_file('Question.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -50,41 +61,41 @@ def index():
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
     if 'garagecode' in request.form:
-        name = request.form['garagecode']
+        __pw = request.form['garagecode']
     elif 'garagecode' in request.args:
-        name = request.args['garagecode']
+        __pw = request.args['garagecode']
     else:
-        name = ""
+        __pw = ""
 
-    if name == PASSWORD:  # Default password to open the door is 12345678 override using file pw
+    if __pw == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         toggleGarageDoorState()
-        if lastDoorState() == DOORCLOSED:
-            lastDoorState(DOOROPEN)
-        elif lastDoorState() == DOOROPEN:
-            lastDoorState(DOORCLOSED)
+        if getLastDoorState() == DOORCLOSED:
+            recordDoorState(DOOROPEN)
+        elif getLastDoorState() == DOOROPEN:
+            recordDoorState(DOORCLOSED)
         else:
             logger.debug("Found unknown door state sleeping for 5 and setting to current state.")
             time.sleep(5)
-            lastDoorState(getGarageDoorState())
+            recordDoorState(getGarageDoorState())
         if request.method == 'POST':  # TODO: figure out if request came from static html
             return redirect("/", code=302)
         else:
             return status()
 
-    if name != PASSWORD:
-        if name == "":
-            name = "NULL"
-        logger.debug("Last state: %s", lastDoorState())
-        logger.debug("Garage Code Entered: %s", name)
+    if __pw != PASSWORD:
+        if __pw == "":
+            __pw = "NULL"
+        logger.debug("Last state: %s", getLastDoorState())
+        logger.debug("Garage Code Entered: %s", __pw)
         return redirect("/", code=302)
 
 @app.route('/status', methods=['GET', 'POST'])
 def status():
-    logger.debug("Status polled.")
-    lastDoorState(getGarageDoorState())
+    __door_state = update_saved_door_state()
+    logger.debug("Status polled: %s.", __door_state)
     #  Return JSON path like Shelly1
     #  https://github.com/bydga/homebridge-garage-door-shelly1#readme
-    return jsonify({'inputs': [{'input':getGarageDoorState()}]})
+    return jsonify({'inputs': [{'input':__door_state}]})
 
 @app.route('/stylesheet.css')
 def stylesheet():

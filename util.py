@@ -53,11 +53,11 @@ def getPassword(fn=None):
 def getGarageDoorState():
     logger.debug("getGarageDoorState: GPIO 16: %s GPIO: 18 %s", GPIO.input(16), GPIO.input(18))
     if GPIO.input(16) == GPIO.LOW and GPIO.input(18) == GPIO.LOW:
-        logger.debug("getGarageDoorState: Last door state was %s", door_dict[lastDoorState()])
-        if lastDoorState() == DOORCLOSED:
+        logger.debug("getGarageDoorState: Last door state was %s", door_dict[getLastDoorState()])
+        if getLastDoorState() == DOORCLOSED:
             logger.debug("getGarageDoorState: %s", door_dict[DOOROPENING])
             return DOOROPENING
-        elif lastDoorState() == DOOROPEN:
+        elif getLastDoorState() == DOOROPEN:
             logger.debug("getGarageDoorState: %s", door_dict[DOORCLOSING])
             return DOORCLOSING
         else:
@@ -82,15 +82,24 @@ def toggleGarageDoorState():
         if time.time() - __start > 30:
             break
 
-def lastDoorState(set_state=None):
+def getLastDoorState():
     if not os.path.exists(STATEFILE):
-        set_state = -1
-    if set_state is not None:
-        set_state = int(set_state)
-        logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
-        with open(STATEFILE, 'wt') as fh:
-            logger.debug("Writing %s to %s", set_state, STATEFILE)
-            fh.write(str(set_state).strip())
-        return set_state
+        return DOORUNKNOWN
+    # if set_state is not None:
+    #     recordDoorState(set_state)
+        # set_state = int(set_state)
+        # logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
+        # with open(STATEFILE, 'wt') as fh:
+        #     logger.debug("Writing %s to %s", set_state, STATEFILE)
+        #     fh.write(str(set_state).strip())
+        # return set_state
     with open(STATEFILE, 'rt') as fh:
         return int(fh.read(128).strip())
+
+def recordDoorState(set_state):
+    set_state = int(set_state)
+    logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
+    with open(STATEFILE, 'wt') as fh:
+        logger.debug("Writing %s to %s", set_state, STATEFILE)
+        fh.write(str(set_state).strip())
+    return set_state
