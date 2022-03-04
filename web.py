@@ -7,7 +7,7 @@ from flask import jsonify
 from util import DOOROPEN
 from util import DOORCLOSED
 from util import DOORUNKNOWN
-from util import door_dict
+# from util import door_dict
 # from util import DOOROPENING
 # from util import DOORCLOSING
 from util import toggleGarageDoorState
@@ -81,9 +81,9 @@ def Garage():
             toggleGarageDoorState()
             recordDoorState(DOOROPEN)
             return status()
-        
+
         toggleGarageDoorState()  # If no action is specified, just toggle the door
-        
+
         if getLastDoorState() == DOORCLOSED:
             recordDoorState(DOOROPEN)
         elif getLastDoorState() == DOOROPEN:
