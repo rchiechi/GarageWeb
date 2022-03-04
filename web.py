@@ -60,15 +60,30 @@ def index():
 
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
+    __pw = ""
+    __action = ""
     if 'garagecode' in request.form:
         __pw = request.form['garagecode']
     elif 'garagecode' in request.args:
         __pw = request.args['garagecode']
-    else:
-        __pw = ""
+    if 'action' in request.form:
+        __action = request.form['action']
+    elif 'action' in request.args:
+        __action = request.args['action']
 
     if __pw == PASSWORD:  # Default password to open the door is 12345678 override using file pw
-        toggleGarageDoorState()
+        # Process a specific action request
+        if __action == 'close' and getLastDoorState() == DOOROPEN:
+            toggleGarageDoorState()
+            recordDoorState(DOORCLOSED)
+            return status()
+        elif __action == 'open' and getLastDoorState() == DOORCLOSED:
+            toggleGarageDoorState()
+            recordDoorState(DOOROPEN)
+            return status()
+        
+        toggleGarageDoorState()  # If no action is specified, just toggle the door
+        
         if getLastDoorState() == DOORCLOSED:
             recordDoorState(DOOROPEN)
         elif getLastDoorState() == DOOROPEN:
