@@ -71,6 +71,8 @@ def Garage():
     elif 'action' in request.args:
         __action = request.args['action']
 
+    logger.debug("action: %s" % __action)
+
     if __pw == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         # Process a specific action request
         if __action == 'close' and getLastDoorState() == DOOROPEN:
@@ -81,7 +83,9 @@ def Garage():
             toggleGarageDoorState()
             recordDoorState(DOOROPEN)
             return status()
-
+        elif __action:
+            return status()
+            
         toggleGarageDoorState()  # If no action is specified, just toggle the door
 
         if getLastDoorState() == DOORCLOSED:
