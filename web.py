@@ -76,7 +76,7 @@ def Garage():
 
     if __pw == PASSWORD:  # Default password to open the door is 12345678 override using file pw
         # Trigger action webhook
-        triggerWebHook(action)
+        triggerWebHook(__action)
         # Process a specific action request
         if __action == 'close' and getLastDoorState() == DOOROPEN:
             toggleGarageDoorState()
