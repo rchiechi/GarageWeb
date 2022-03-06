@@ -67,9 +67,11 @@ def triggerWebHook(action):
     apikey = getIfttKey()
     if not apikey or action not in ACTIONS:
         return False
-    logger.debug('Trigger webhook %s', ACTIONS[action])
+    __url = '%s/trigger/%s/with/key/%s' % (WEBHOOKURI, ACTIONS[action], apikey)
+    logger.debug('Trigger webhook %s', __url)
     #  If we have a valid action and webhook key we proceed
-    r = requests.post('%s/trigger/%s/with/key/%s' % (WEBHOOKURI, ACTIONS[action], apikey))
+    r = requests.post(__url)
+    logger.debug(r.text)
     if r.status_code == 200:
         return True
     else:
@@ -110,14 +112,6 @@ def toggleGarageDoorState():
 def getLastDoorState():
     if not os.path.exists(STATEFILE):
         return DOORUNKNOWN
-    # if set_state is not None:
-    #     recordDoorState(set_state)
-        # set_state = int(set_state)
-        # logger.debug("lastDoorState: Setting door state %s", door_dict[set_state])
-        # with open(STATEFILE, 'wt') as fh:
-        #     logger.debug("Writing %s to %s", set_state, STATEFILE)
-        #     fh.write(str(set_state).strip())
-        # return set_state
     with open(STATEFILE, 'rt') as fh:
         return int(fh.read(128).strip())
 
