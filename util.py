@@ -33,7 +33,7 @@ door_dict = {DOOROPEN: "Open",
 
 #  Default webhook actions are 'garage_door_opened' and 'garage_door_closed' configured
 ACTIONS = {'open':'garage_door_opened', 'close':'garage_door_closed'}
-WEBHOOKURI = 'https://maker.ifttt.com/'
+WEBHOOKURI = 'https://maker.ifttt.com'
 
 logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
 logger = logging.getLogger('GarageWebUtil')
