@@ -2,6 +2,7 @@ import os
 import time
 import RPi.GPIO as GPIO
 import logging
+import requests
 
 GPIO.setmode(GPIO.BOARD)  # the pin numbers refer to the board connector not the chip
 GPIO.setwarnings(False)
@@ -30,6 +31,10 @@ door_dict = {DOOROPEN: "Open",
              DOORCLOSING: "Closing",
              DOORUNKNOWN: "Unknown"}
 
+#  Default webhook actions are 'garage_door_opened' and 'garage_door_closed' configured
+ACTIONS = {'open':'garage_door_opened', 'close':'garage_door_closed'}
+WEBHOOKURI = 'https://maker.ifttt.com/trigger'
+
 logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
 logger = logging.getLogger('GarageWebUtil')
 streamHandler = logging.StreamHandler()
@@ -49,6 +54,26 @@ def getPassword(fn=None):
         # Read first 128 bytes of file and return as a string
         return fh.read(128).strip()
 
+def getIfttKey(fn=None):
+    if fn is None:  # By default read from file "ifttt" in same dir as python scripts
+        fn = os.path.join(os.path.dirname(os.path.realpath(__file__)), "ifttt")
+    if not os.path.exists(fn):
+        return ""  # If file does not exist, return empty key
+    with open(fn, 'rt') as fh:
+        # Read first 128 bytes of file and return as a string
+        return fh.read(128).strip()
+
+def triggerWebHook(action):
+    apikey = getIfttKey()
+    if not apikey or action not in ACTIONS:
+        return False
+    logger.debug('Trigger webhook %s', ACTIONS[action])
+    #  If we have a valid action and webhook key we proceed
+    r = requests.post('%s/trigger/%s/with/key%s' (WEBHOOKURI, ACTIONS[action], apikey))
+    if r.status_code == 200:
+        return True
+    else:
+        return False
 
 def getGarageDoorState():
     logger.debug("getGarageDoorState: GPIO 16: %s GPIO: 18 %s", GPIO.input(16), GPIO.input(18))

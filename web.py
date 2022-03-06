@@ -15,6 +15,7 @@ from util import getGarageDoorState
 from util import getPassword
 from util import getLastDoorState
 from util import recordDoorState
+from util import triggerWebHook
 from util import LOGFILE
 
 logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
@@ -74,6 +75,8 @@ def Garage():
     logger.debug("action: %s" % __action)
 
     if __pw == PASSWORD:  # Default password to open the door is 12345678 override using file pw
+        # Trigger action webhook
+        triggerWebHook(action)
         # Process a specific action request
         if __action == 'close' and getLastDoorState() == DOOROPEN:
             toggleGarageDoorState()
