@@ -69,7 +69,7 @@ def triggerWebHook(action):
         return False
     logger.debug('Trigger webhook %s', ACTIONS[action])
     #  If we have a valid action and webhook key we proceed
-    r = requests.post('%s/trigger/%s/with/key%s' (WEBHOOKURI, ACTIONS[action], apikey))
+    r = requests.post('%s/trigger/%s/with/key%s' % (WEBHOOKURI, ACTIONS[action], apikey))
     if r.status_code == 200:
         return True
     else:
