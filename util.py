@@ -31,8 +31,9 @@ door_dict = {DOOROPEN: "Open",
              DOORCLOSING: "Closing",
              DOORUNKNOWN: "Unknown"}
 
-#  Default webhook actions are 'garage_door_opened' and 'garage_door_closed' configured
-ACTIONS = {'open':'garage_door_opened', 'close':'garage_door_closed'}
+#  Default webhook actions e.g., 'garage_door_opened' and 'garage_door_closed' need to match webhooks at IFTTT
+ACTIONS = {'open':'garage_door_opened', 'close':'garage_door_closed', 'update':'update_garage'}
+PAYLOADS = {'open':('Garage%20Door%20Open','',''), 'closed':('Garage%20Door%20Closed','','')}
 WEBHOOKURI = 'https://maker.ifttt.com'
 
 logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
@@ -63,19 +64,22 @@ def getIfttKey(fn=None):
         # Read first 128 bytes of file and return as a string
         return fh.read(128).strip()
 
-def triggerWebHook(action):
+def triggerWebHook(action, payload=None):
     apikey = getIfttKey()
     if not apikey or action not in ACTIONS:
         return False
     __url = '%s/trigger/%s/with/key/%s' % (WEBHOOKURI, ACTIONS[action], apikey)
     logger.debug('Trigger webhook %s', __url)
-    #  If we have a valid action and webhook key we proceed
-    r = requests.post(__url)
-    logger.debug(r.text)
-    if r.status_code == 200:
-        return True
+    if payload in PAYLOADS:
+        logger.debug("Firing webhook with payload %s.", payload)
+        r = requests.post(__url,
+                          data={'value1': PAYLOADS[payload][0],
+                                'value2': PAYLOADS[payload][1],
+                                'value3': PAYLOADS[payload][2]})
     else:
-        return False
+        r = requests.post(__url)
+    logger.debug(r.text)
+    return bool(r.status_code == 200)
 
 def getGarageDoorState():
     logger.debug("getGarageDoorState: GPIO 16: %s GPIO: 18 %s", GPIO.input(16), GPIO.input(18))

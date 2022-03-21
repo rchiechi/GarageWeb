@@ -10,6 +10,7 @@ from util import DOORUNKNOWN
 # from util import DOOROPENING
 # from util import DOORCLOSING
 from util import getGarageDoorState
+from util import triggerWebHook
 from util import lastDoorState
 from util import door_dict
 from util import LOGFILE
@@ -53,6 +54,7 @@ try:
             if getGarageDoorState() == DOORCLOSED:  # Door is Closed
                 logger.info("Door Closed")
                 DoorOpenTimer = 0
+                triggerWebHook('update', 'closed')
 
             if getGarageDoorState() == DOOROPEN:  # Door is Open
                 logger.info("Door Open")
@@ -62,6 +64,8 @@ try:
                                       '%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
                 DoorOpenTimer = 1
                 DoorOpenTimerMessageSent = 0
+                triggerWebHook('update', 'open')
+
 
 except KeyboardInterrupt:
     logger.info('Goodbye! -- Log Program Shutdown')

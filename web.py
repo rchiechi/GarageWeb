@@ -29,6 +29,16 @@ PASSWORD = getPassword()
 
 app = Flask(__name__)
 
+def getparam(param):
+    """Get parameters of GET or POST request."""
+    if request.method == 'POST':
+        if param in request.form:
+            return request.form[param]
+    elif request.method == 'GET':
+        if param in request.args:
+            return request.args[param]
+    return ""
+
 def update_saved_door_state():
     __door_state = getGarageDoorState()
     if __door_state in (DOOROPEN, DOORCLOSED):
@@ -61,16 +71,8 @@ def index():
 
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
-    __pw = ""
-    __action = ""
-    if 'garagecode' in request.form:
-        __pw = request.form['garagecode']
-    elif 'garagecode' in request.args:
-        __pw = request.args['garagecode']
-    if 'action' in request.form:
-        __action = request.form['action']
-    elif 'action' in request.args:
-        __action = request.args['action']
+    __pw = getparam('garagecode')
+    __action = getparam('action')
 
     logger.debug("action: %s" % __action)
 
@@ -91,7 +93,7 @@ def Garage():
             return status()
         elif __action:
             return status()
-            
+
         toggleGarageDoorState()  # If no action is specified, just toggle the door
 
         if getLastDoorState() == DOORCLOSED:
