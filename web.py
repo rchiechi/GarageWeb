@@ -29,6 +29,7 @@ PASSWORD = getPassword()
 
 app = Flask(__name__)
 
+
 def getparam(param):
     """Get parameters of GET or POST request."""
     if request.method == 'POST':
@@ -39,11 +40,13 @@ def getparam(param):
             return request.args[param]
     return ""
 
+
 def update_saved_door_state():
     __door_state = getGarageDoorState()
     if __door_state in (DOOROPEN, DOORCLOSED):
         recordDoorState(__door_state)
     return __door_state
+
 
 def handle_garage_status():  # User feedback about garage status
     __door_state = update_saved_door_state()
@@ -65,9 +68,11 @@ def handle_garage_status():  # User feedback about garage status
         logger.error("Door is in impossible state!")
     return app.send_static_file('Question.html')
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return handle_garage_status()
+
 
 @app.route('/garage', methods=['GET', 'POST'])
 def Garage():
@@ -116,21 +121,25 @@ def Garage():
         logger.debug("Garage Code Entered: %s", __pw)
         return redirect("/", code=302)
 
+
 @app.route('/status', methods=['GET', 'POST'])
 def status():
     __door_state = update_saved_door_state()
     logger.debug("Status polled: %s.", __door_state)
     #  Return JSON path like Shelly1
     #  https://github.com/bydga/homebridge-garage-door-shelly1#readme
-    return jsonify({'inputs': [{'input':__door_state}]})
+    return jsonify({'inputs': [{'input': __door_state}]})
+
 
 @app.route('/stylesheet.css')
 def stylesheet():
     return app.send_static_file('stylesheet.css')
 
+
 @app.route('/log')
 def logfile():
     return app.send_static_file(LOGFILE)
+
 
 @app.route('/images/<picture>')
 def images(picture):

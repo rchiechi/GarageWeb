@@ -1,6 +1,6 @@
 import os
 import time
-import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO  # type: ignore
 import logging
 import requests
 
@@ -32,8 +32,8 @@ door_dict = {DOOROPEN: "Open",
              DOORUNKNOWN: "Unknown"}
 
 #  Default webhook actions e.g., 'garage_door_opened' and 'garage_door_closed' need to match webhooks at IFTTT
-ACTIONS = {'open':'garage_door_opened', 'close':'garage_door_closed', 'update':'update_garage'}
-PAYLOADS = {'open':('Garage%20Door%20Open','',''), 'closed':('Garage%20Door%20Closed','','')}
+ACTIONS = {'open': 'garage_door_opened', 'close': 'garage_door_closed', 'update': 'update_garage'}
+PAYLOADS = {'open': ('Garage%20Door%20Open', '', ''), 'closed': ('Garage%20Door%20Closed', '', '')}
 WEBHOOKURI = 'https://maker.ifttt.com'
 
 logFormatter = logging.Formatter("%(name)s: %(asctime)s [%(levelname)-5.5s]  %(message)s")
@@ -46,6 +46,7 @@ fileHandler.setFormatter(logFormatter)
 logger.addHandler(fileHandler)
 logger.setLevel(logging.DEBUG)
 
+
 def getPassword(fn=None):
     if fn is None:  # By default read from file "pw" in same dir as python scripts
         fn = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pw")
@@ -55,6 +56,7 @@ def getPassword(fn=None):
         # Read first 128 bytes of file and return as a string
         return fh.read(128).strip()
 
+
 def getIfttKey(fn=None):
     if fn is None:  # By default read from file "ifttt" in same dir as python scripts
         fn = os.path.join(os.path.dirname(os.path.realpath(__file__)), "ifttt")
@@ -63,6 +65,7 @@ def getIfttKey(fn=None):
     with open(fn, 'rt') as fh:
         # Read first 128 bytes of file and return as a string
         return fh.read(128).strip()
+
 
 def triggerWebHook(action, payload=None):
     apikey = getIfttKey()
@@ -80,6 +83,7 @@ def triggerWebHook(action, payload=None):
         r = requests.post(__url)
     logger.debug(r.text)
     return bool(r.status_code == 200)
+
 
 def getGarageDoorState():
     logger.debug("getGarageDoorState: GPIO 16: %s GPIO: 18 %s", GPIO.input(16), GPIO.input(18))
@@ -102,6 +106,7 @@ def getGarageDoorState():
             logger.debug("getGarageDoorState: %s", door_dict[DOOROPEN])
             return DOOROPEN
 
+
 def toggleGarageDoorState():
     GPIO.output(7, GPIO.LOW)
     time.sleep(1)
@@ -113,11 +118,13 @@ def toggleGarageDoorState():
         if time.time() - __start > 30:
             break
 
+
 def getLastDoorState():
     if not os.path.exists(STATEFILE):
         return DOORUNKNOWN
     with open(STATEFILE, 'rt') as fh:
         return int(fh.read(128).strip())
+
 
 def recordDoorState(set_state):
     set_state = int(set_state)
