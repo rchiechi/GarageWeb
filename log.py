@@ -33,7 +33,7 @@ while True:
     except FileNotFoundError:
         pass  # Don't crash if the file does not exist
     logger.debug("Last door state was: %s", door_dict[getLastDoorState()])
-    time.sleep(10)
+    time.sleep(60)
     if DoorOpenTimer == 1:  # Door Open Timer has Started
         if time.time() - TimeDoorOpened > 900 and DoorOpenTimerMessageSent == 0:
             logger.info("Your Garage Door has been Open for 15 minutes")
