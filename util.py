@@ -73,14 +73,17 @@ def triggerWebHook(action, payload=None):
         return False
     __url = '%s/trigger/%s/with/key/%s' % (WEBHOOKURI, ACTIONS[action], apikey)
     logger.debug('Trigger webhook %s', __url)
-    if payload in PAYLOADS:
-        logger.debug("Firing webhook with payload %s.", payload)
-        r = requests.post(__url,
-                          data={'value1': PAYLOADS[payload][0],
-                                'value2': PAYLOADS[payload][1],
-                                'value3': PAYLOADS[payload][2]})
-    else:
-        r = requests.post(__url)
+    try:
+        if payload in PAYLOADS:
+            logger.debug("Firing webhook with payload %s.", payload)
+            r = requests.post(__url,
+                              data={'value1': PAYLOADS[payload][0],
+                                    'value2': PAYLOADS[payload][1],
+                                    'value3': PAYLOADS[payload][2]})
+        else:
+            r = requests.post(__url)
+    except requests.exceptions.ConnectionError:
+        return False
     logger.debug(r.text)
     return bool(r.status_code == 200)
 
