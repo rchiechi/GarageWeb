@@ -21,8 +21,6 @@ logger.addHandler(fileHandler)
 logger.setLevel(logging.INFO)
 
 logger.info("Hello! Program Starting.")
-print(" Control + C to exit Program")
-
 TimeDoorOpened = time.time()  # Default Time
 DoorOpenTimer = 0  # Default start status turns timer off
 DoorOpenTimerMessageSent = 1  # Turn off messages until timer is started
