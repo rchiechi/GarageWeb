@@ -29,8 +29,11 @@ DoorOpenTimerMessageSent = 1  # Turn off messages until timer is started
 
 
 while True:
-    if os.path.getsize(LOGFILE) > 1024**2:
-        os.unlink(LOGFILE)  # Prune log file when it hits 1 MB
+    try:
+        if os.path.getsize(LOGFILE) > 1024**2:
+            os.unlink(LOGFILE)  # Prune log file when it hits 1 MB
+    except FileNotFoundError:
+        pass  # Don't crash if the file does not exist
     logger.debug("Last door state was: %s", door_dict[getLastDoorState()])
     time.sleep(10)
     if DoorOpenTimer == 1:  # Door Open Timer has Started
