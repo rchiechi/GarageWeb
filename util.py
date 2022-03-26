@@ -123,10 +123,17 @@ def toggleGarageDoorState():
 
 
 def getLastDoorState():
+    doorstate = DOORUNKNOWN
     if not os.path.exists(STATEFILE):
-        return DOORUNKNOWN
-    with open(STATEFILE, 'rt') as fh:
-        return int(fh.read(128).strip())
+        return doorstate
+    try:
+        with open(STATEFILE, 'rt') as fh:
+            __doorstate = int(fh.read(128).strip())
+            if __doorstate in door_dict:
+                doorstate = __doorstate
+    except ValueError:
+        logger.warn("Read bad doorstate %s from %s", __doorstate, STATEFILE)
+    return doorstate
 
 
 def recordDoorState(set_state):
