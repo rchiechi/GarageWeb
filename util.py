@@ -128,11 +128,11 @@ def getLastDoorState():
         return doorstate
     try:
         with open(STATEFILE, 'rt') as fh:
-            __doorstate = int(fh.read(128).strip())
-            if __doorstate in door_dict:
-                doorstate = __doorstate
+            _doorstate = int(fh.read(128).strip())
+            if _doorstate in door_dict:
+                doorstate = _doorstate
     except ValueError:
-        logger.warn("Read bad doorstate %s from %s", __doorstate, STATEFILE)
+        logger.warn("Read bad doorstate reading from %s", STATEFILE)
     return doorstate
 
 
